@@ -1,4 +1,4 @@
-# EvalHub
+# OpenBenchmarks
 
 Community-powered LLM benchmark aggregator. Members run evals locally, upload scores and artifacts, and the site visualizes aggregated results.
 
@@ -17,7 +17,7 @@ Community-powered LLM benchmark aggregator. Members run evals locally, upload sc
 
 ```bash
 git clone <repo>
-cd evalhub
+cd openbenchmarks
 npm install
 ```
 
@@ -34,7 +34,7 @@ Fill in all values in `.env.local`:
 | `DEFAULT_BENCHMARK_ID` | Benchmark shown by default on leaderboard (e.g. `mmlu`) |
 | `CONTACT_EMAIL` | Email shown on run detail pages |
 | `NEXTAUTH_SECRET` | Random secret — run `openssl rand -base64 32` |
-| `NEXTAUTH_URL` | Full URL of your app (e.g. `https://evalhub.vercel.app`) |
+| `NEXTAUTH_URL` | Full URL of your app (e.g. `https://openbenchmarks.vercel.app`) |
 | `GITHUB_CLIENT_ID` | From GitHub OAuth app |
 | `GITHUB_CLIENT_SECRET` | From GitHub OAuth app |
 | `MONGODB_URI` | MongoDB Atlas connection string |
@@ -126,8 +126,8 @@ POST /api/end-upload    →  { success: true }
   num_output_tokens: number
   time_took: number       // seconds
   total_cost: number      // USD
-  submitter_id: string    // who ran the eval
-  date_submitted: Date    // when eval was run
+  evaluator_id: string    // who ran the eval
+  date_evaluated: Date    // when eval was run
   uploader_id: string     // GitHub username of uploader
   date_uploaded: Date
   artifact_key: string    // S3 key

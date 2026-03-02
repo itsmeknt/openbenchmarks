@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --surface-2: #181818;
+  --border: #222222;
+  --border-bright: #333333;
+  --text: #e8e8e8;
+  --text-muted: #666666;
+  --text-dim: #444444;
+  --green: #22c55e;
+  --red: #ef4444;
+  --primary: #70d8eb;
+  --primary-dim: #058ca2;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
+
+/* Selection */
+::selection { background: var(--primary-dim); color: var(--text); }
+
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* Glowing primary border for focused/active elements */
+.primary-glow:focus, .primary-glow:focus-within {
+  outline: none;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 1px var(--primary-dim);
+}
+
+/* Table styles */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+
+.data-table th {
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-weight: 500;
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  letter-spacing: 0.05em;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.data-table th:hover { color: var(--primary); }
+.data-table th.sorted { color: var(--primary); }
+
+.data-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.data-table tr:hover td { background: var(--surface-2); }
+.data-table td a { color: var(--primary); text-decoration: none; }
+.data-table td a:hover { text-decoration: underline; }
+
+/* Input / select base */
+.field {
+  background: var(--surface-2);
+  border: 1px solid var(--border-bright);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  transition: border-color 0.15s;
+}
+
+.field:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+select.field option { background: var(--surface-2); }
+
+/* Btn */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid transparent;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #000;
+  border-color: var(--primary);
+}
+.btn-primary:hover { background: var(--primary-dim); border-color: var(--primary-dim); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border-color: var(--border-bright);
+}
+.btn-ghost:hover { color: var(--text); border-color: #555; }
+
+.btn-danger {
+  background: transparent;
+  color: var(--red);
+  border-color: #5a1515;
+}
+.btn-danger:hover { background: #5a1515; }
+
+/* Tag/badge */
+.badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+}
+
+.badge-primary { background: #2a1c00; color: var(--primary); border: 1px solid var(--primary-dim); }
+.badge-green { background: #0a2a14; color: var(--green); border: 1px solid #155c2c; }
+.badge-gray { background: var(--surface-2); color: var(--text-muted); border: 1px solid var(--border); }
+
+/* Card */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 20px;
+}
+
+.nav-link {
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.nav-link:hover { color: var(--text); }
