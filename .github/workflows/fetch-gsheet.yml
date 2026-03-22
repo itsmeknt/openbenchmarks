@@ -42,6 +42,23 @@ jobs:
           OUTPUT_PATH: "site/gsheet_data.json"
         run: python scripts/fetch_gsheet.py
 
+      - name: Debug workspace
+        shell: bash
+        run: |
+          echo "PWD:"
+          pwd
+          echo
+          echo "Repository root:"
+          ls -la
+          echo
+          tree .
+
+      - name: Upload debug site artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-debug
+          path: ./site
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
