@@ -34,7 +34,7 @@ jobs:
         run: |
           mkdir -p site
           cp -r static/ site/
-	  
+  
       - name: Fetch Google sheet and build JSON
         env:
           GOOGLE_SHEETS_API_KEY: ${{ secrets.GOOGLE_SHEETS_API_KEY }}
