@@ -33,7 +33,7 @@ jobs:
       - name: Copy site files
         run: |
           mkdir -p site
-          cp -r static/ site/
+          cp -R static/. site/
   
       - name: Fetch Google sheet and build JSON
         env:
