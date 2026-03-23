@@ -214,10 +214,14 @@ function groupByX(rows) {
     groups[x].push(y);
     rowGroups[x].push(row);
   }
-  // Sort labels by descending median (most informative default)
-  const labels = Object.keys(groups).sort(
-    (a, b) => (calcMedian(groups[b]) ?? 0) - (calcMedian(groups[a]) ?? 0)
-  );
+  // If X axis is numeric, sort labels by their numeric value ascending.
+  // Otherwise sort by descending Y-median (categorical default).
+  const labels = Object.keys(groups).sort((a, b) => {
+    if (numAttrs.includes(state.xAxis)) {
+      return parseFloat(a) - parseFloat(b);
+    }
+    return (calcMedian(groups[b]) ?? 0) - (calcMedian(groups[a]) ?? 0);
+  });
   return { groups, rowGroups, labels };
 }
  
