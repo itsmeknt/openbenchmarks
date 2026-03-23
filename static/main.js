@@ -4,8 +4,8 @@
  
 /** Columns shown in the data table (in order). */
 const TABLE_COLS = [
-  'benchmark', 'model', 'model_quant', 'model_size_gb',
-  'pass_1', 'pass_2', 'seconds_per_test', 'evaluator', 'date', 'notes',
+    'benchmark', 'model', 'model_id', 'model_quant', 'model_size_gb', 'kv_quant', 'format',
+  'pass_1', 'pass_2', 'prompt_tokens', 'completion_tokens', 'seconds_per_test', 'total_cost', 'evaluator', 'date', 'source', 'notes',
 ];
  
 /** Numeric-looking columns for display alignment. */
