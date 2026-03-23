@@ -40,3 +40,14 @@ JSON data of the google spreadsheet fetch will look like this:
   }
 }
 ```
+
+
+Running this locally:
+
+```bash
+python3 scripts/fetch_gsheet.py 
+mv site/gsheet_data.json static/
+cd static/ && python3 -m http.server 8000
+```
+
+Then visit localhost:8000

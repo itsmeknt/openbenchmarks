@@ -1,20 +1,100 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Sheet Viewer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aider Community | Open Benchmark Evals</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+      <!-- Chart.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <!-- Box plot plugin (must come after Chart.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/@sgratzl/chartjs-chart-boxplot@4.4.4/build/index.umd.min.js"></script>
   </head>
   <body>
-    <h1>Spreadsheet Data</h1>
 
-    <div>
-      <label for="sheet-select">Sheet:</label>
-      <select id="sheet-select"></select>
-    </div>
+    <header class="header">
+      <div class="header-title">
+	Aider Community <span>/ Open Benchmark Evals</span>
+      </div>
+      <div class="header-right">
+	<span id="loading-msg">Loading data…</span>
+	<button class="theme-btn" onclick="toggleTheme()" title="Toggle light/dark">
+	  <span id="theme-icon">☀ light</span>
+	</button>
+      </div>
+    </header>
 
-    <pre id="output"></pre>
+    <main class="main">
 
-    <script src="./load_gsheet.js"></script>
+      <!-- Graph controller -->
+      <div class="card">
+	<div class="card-header">
+	  <span class="card-label">Graph</span>
+	  <span class="badge" id="result-badge">— rows</span>
+	</div>
+	<div class="card-body">
+	  <div class="graph-controls">
+	    <div class="ctrl-group">
+	      <span class="ctrl-label">X axis</span>
+	      <select id="ctrl-x" onchange="onCtrlChange()"></select>
+	    </div>
+	    <div class="ctrl-group">
+	      <span class="ctrl-label">aggregate</span>
+	      <select id="ctrl-agg" onchange="onCtrlChange()">
+		<option value="median">Median</option>
+		<option value="mean">Mean</option>
+		<option value="variance">Variance</option>
+		<option value="boxplot">Box Plot</option>
+	      </select>
+	    </div>
+	    <div class="ctrl-group">
+	      <span class="ctrl-label">Y axis</span>
+	      <select id="ctrl-y" onchange="onCtrlChange()"></select>
+	    </div>
+	  </div>
+	</div>
+      </div>
+
+      <!-- Filters -->
+      <div class="card">
+	<div class="card-header">
+	  <span class="card-label">Filters</span>
+	</div>
+	<div class="card-body">
+	  <div class="filters-list" id="filters-list"></div>
+	  <button class="btn-add" onclick="addFilter()">+ add filter</button>
+	</div>
+      </div>
+
+      <!-- Chart -->
+      <div class="card">
+	<div class="card-header">
+	  <span class="card-label">Chart</span>
+	</div>
+	<div class="card-body">
+	  <div class="chart-wrap">
+	    <canvas id="chart-canvas"></canvas>
+	    <div class="chart-empty" id="chart-empty" style="display:none">No data to display.</div>
+	    <div id="chart-tooltip"></div>
+	  </div>
+	</div>
+      </div>
+
+      <!-- Data table -->
+      <div class="card">
+	<div class="card-header">
+	  <span class="card-label">Data</span>
+	  <span class="badge" id="table-badge">—</span>
+	</div>
+	<div class="table-scroll">
+	  <div id="table-root"></div>
+	</div>
+      </div>
+
+    </main>
+
+    <script src="main.js"></script>
   </body>
 </html>
