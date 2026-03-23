@@ -398,6 +398,12 @@ function renderChart(rows) {
               return lbl && lbl.length > 28 ? lbl.slice(0, 27) + '…' : lbl;
             },
           },
+          title: {
+            display: true,
+            text: `${state.xAxis} (${state.xAgg})`,
+            color: textMuted,
+            font: { family: "'JetBrains Mono', monospace", size: 11 },
+          },
         },
         y: {
           ...axisBase,
