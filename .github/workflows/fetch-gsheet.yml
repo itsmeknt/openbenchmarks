@@ -2,7 +2,7 @@ name: Fetch Google Sheet and deploy Pages
 
 on:
   schedule:
-    - cron: "17,47 * * * *"
+    - cron: "0 * * * *"
   workflow_dispatch:
 
 permissions:
