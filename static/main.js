@@ -267,7 +267,51 @@ function renderChart(rows) {
     ticks: { color: textMuted, font: { family: "'JetBrains Mono', monospace", size: 11 } },
     grid:  { color: borderClr },
   };
- 
+
+  // Inline data-label plugin (instance-scoped, not globally registered)
+  const dataLabelPlugin = isBoxPlot ? {
+    id: 'boxLabels',
+    afterDraw(chart) {
+      const ctx = chart.ctx;
+      const meta = chart.getDatasetMeta(0);
+      ctx.save();
+      ctx.font = "10px 'JetBrains Mono', monospace";
+      ctx.textAlign = 'center';
+      ctx.fillStyle = textMuted;
+      meta.data.forEach((el, i) => {
+        const vals = chart.data.datasets[0].data[i];
+        if (!Array.isArray(vals) || !vals.length) return;
+        const s   = [...vals].sort((a, b) => a - b);
+        const minV = s[0], maxV = s[s.length - 1], medV = calcMedian(s);
+        const yScale = chart.scales.y;
+        const x = el.x;
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(maxV.toFixed(1), x, yScale.getPixelForValue(maxV) - 3);
+        ctx.fillText(medV.toFixed(1), x, yScale.getPixelForValue(medV) - 3);
+        ctx.textBaseline = 'top';
+        ctx.fillText(minV.toFixed(1), x, yScale.getPixelForValue(minV) + 3);
+      });
+      ctx.restore();
+    },
+  } : {
+    id: 'barLabels',
+    afterDraw(chart) {
+      const ctx = chart.ctx;
+      const meta = chart.getDatasetMeta(0);
+      ctx.save();
+      ctx.font = "10px 'JetBrains Mono', monospace";
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillStyle = textMuted;
+      meta.data.forEach((bar, i) => {
+        const val = chart.data.datasets[0].data[i];
+        if (val == null) return;
+        ctx.fillText(val.toFixed(1), bar.x, bar.y - 3);
+      });
+      ctx.restore();
+    },
+  };
+    
   const config = {
     type: chartType,
     data: { labels, datasets: [dataset] },
@@ -366,6 +410,7 @@ function renderChart(rows) {
         },
       },
     },
+    plugins: [dataLabelPlugin],
   };
  
   if (chartInst) chartInst.destroy();
