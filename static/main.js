@@ -5,12 +5,12 @@
 /** Columns shown in the data table (in order). */
 const TABLE_COLS = [
     'benchmark', 'model', 'model_id', 'model_quant', 'model_size_gb', 'kv_quant', 'format',
-  'pass_1', 'pass_2', 'prompt_tokens', 'completion_tokens', 'seconds_per_test', 'total_cost', 'evaluator', 'date',
+    'pass_1', 'pass_2', 'prompt_tokens', 'completion_tokens', 'error_outputs', 'exhausted_context_windows', 'seconds_per_test', 'total_cost', 'evaluator', 'date',
 ];
  
 /** Numeric-looking columns for display alignment. */
 const NUMERIC_DISPLAY = new Set(['model_size_gb', 'pass_1', 'pass_2', 'prompt_tokens',
-  'completion_tokens', 'seconds_per_test', 'total_cost']);
+  'completion_tokens', 'error_outputs', 'exhausted_context_windows', 'seconds_per_test', 'total_cost']);
  
 // ================================================================
 //  STATE

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Aider Bench Report Parser</title>
+</head>
+<body>
+  <h2>Aider Benchmark Report Parser</h2>
+  <p>Paste your Aider benchrun YAML report below, then click Parse.</p>
+  <textarea id="input" rows="35" cols="80" placeholder="Paste YAML report here..."></textarea>
+  <br><br>
+  <button onclick="parse()">Parse → Spreadsheet Row</button>
+  <button onclick="copyOutput()" id="copyBtn" style="display:none">Copy Row</button>
+  <br><br>
+  <div id="headers" style="display:none">
+    <strong>Column headers (for reference):</strong><br>
+    <code id="headerRow" style="white-space:pre; display:block; background:#eee; padding:4px;"></code>
+  </div>
+  <br>
+  <div id="outputLabel" style="display:none"><strong>Tab-separated row (paste into spreadsheet):</strong></div>
+  <textarea id="output" rows="3" cols="80" readonly style="display:none"></textarea>
+  <div id="error" style="color:red"></div>
+
+  <script>
+    // Full column order from the spreadsheet
+    const COLUMNS = [
+      "benchmark", "model", "model_id", "model_url", "model_params",
+      "model_quant", "model_size_gb", "kv_quant", "format",
+      "pass_1", "pass_2", "prompt_tokens", "completion_tokens",
+      "error_outputs", "exhausted_context_windows", "seconds_per_test",
+      "total_cost", "evaluator", "source", "date", "notes"
+    ];
+
+    // Parse suffixed numbers like "1.59m", "571k", "1,234,567", or plain numbers
+    function parseNum(val) {
+      if (val === undefined || val === null || val === "") return "";
+      const s = String(val).trim().replace(/,/g, "");
+      const m = s.match(/^([\d.]+)\s*([kmb]?)$/i);
+      if (!m) return s;
+      let n = parseFloat(m[1]);
+      const suffix = m[2].toLowerCase();
+      if (suffix === "k") n *= 1e3;
+      else if (suffix === "m") n *= 1e6;
+      else if (suffix === "b") n *= 1e9;
+      return Math.round(n);
+    }
+
+    // Parse the YAML-like key: value format
+    function parseYAML(text) {
+      const result = {};
+      for (const line of text.split("\n")) {
+        const m = line.match(/^\s*[-\s]*(\w+):\s*(.*)$/);
+        if (m) {
+          result[m[1].trim()] = m[2].trim();
+        }
+      }
+      return result;
+    }
+
+    function parse() {
+      document.getElementById("error").textContent = "";
+      const raw = document.getElementById("input").value;
+      if (!raw.trim()) {
+        document.getElementById("error").textContent = "Please paste a report first.";
+        return;
+      }
+
+      let data;
+      try {
+        data = parseYAML(raw);
+      } catch (e) {
+        document.getElementById("error").textContent = "Failed to parse report: " + e.message;
+        return;
+      }
+
+      // Map Aider fields → spreadsheet columns
+      const row = {};
+      row["format"]                   = data["edit_format"] || "";
+      row["pass_1"]                   = data["pass_rate_1"] || "";
+      row["pass_2"]                   = data["pass_rate_2"] || "";
+      row["prompt_tokens"]            = parseNum(data["prompt_tokens"]);
+      row["completion_tokens"]        = parseNum(data["completion_tokens"]);
+      row["error_outputs"]            = data["error_outputs"] || "";
+      row["exhausted_context_windows"]= data["exhausted_context_windows"] || "";
+      row["seconds_per_test"]         = data["seconds_per_case"] || "";
+      row["total_cost"]               = data["total_cost"] || "";
+
+      // Build tab-separated row in column order, leaving unmapped columns blank
+      const cells = COLUMNS.map(col => row[col] !== undefined ? row[col] : "");
+      const tsv = cells.join("\t");
+
+      document.getElementById("headerRow").textContent = COLUMNS.join("\t");
+      document.getElementById("headers").style.display = "block";
+      document.getElementById("outputLabel").style.display = "block";
+      const out = document.getElementById("output");
+      out.style.display = "block";
+      out.value = tsv;
+      document.getElementById("copyBtn").style.display = "inline";
+    }
+
+    function copyOutput() {
+      const out = document.getElementById("output");
+      out.select();
+      document.execCommand("copy");
+      document.getElementById("copyBtn").textContent = "Copied!";
+      setTimeout(() => document.getElementById("copyBtn").textContent = "Copy Row", 1500);
+    }
+  </script>
+</body>
+</html>
