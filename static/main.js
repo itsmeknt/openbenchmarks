@@ -215,10 +215,20 @@ function groupByX(rows) {
     rowGroups[x].push(row);
   }
   // If X axis is numeric, sort labels by their numeric value ascending.
+  // If model quant, sort by quant number first, then lexicographically.
   // Otherwise sort lexicographically.
   const labels = Object.keys(groups).sort((a, b) => {
     if (numAttrs.includes(state.xAxis)) {
       return parseFloat(a) - parseFloat(b);
+    }
+    if (state.xAxis === 'model_quant') {
+      const firstNum = s => { const m = s.match(/\d+(\.\d+)?/); return m ? parseFloat(m[0]) : Infinity; };
+      const nd = firstNum(a) - firstNum(b);
+      if (nd !== 0) {
+	  return nd;
+      } else {
+	  return a.localeCompare(b);
+      }
     }
     return a.localeCompare(b);
   });
