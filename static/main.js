@@ -215,12 +215,12 @@ function groupByX(rows) {
     rowGroups[x].push(row);
   }
   // If X axis is numeric, sort labels by their numeric value ascending.
-  // Otherwise sort by descending Y-median (categorical default).
+  // Otherwise sort lexicographically.
   const labels = Object.keys(groups).sort((a, b) => {
     if (numAttrs.includes(state.xAxis)) {
       return parseFloat(a) - parseFloat(b);
     }
-    return (calcMedian(groups[b]) ?? 0) - (calcMedian(groups[a]) ?? 0);
+    return a.localeCompare(b);
   });
   return { groups, rowGroups, labels };
 }
