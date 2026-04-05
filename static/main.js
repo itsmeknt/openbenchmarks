@@ -215,20 +215,31 @@ function groupByX(rows) {
     rowGroups[x].push(row);
   }
   // If X axis is numeric, sort labels by their numeric value ascending.
-  // If model quant, sort by quant number first, then lexicographically.
+  // If model quant, sort by quant bit number first, then size (S/M/L), then lexicographically.
   // Otherwise sort lexicographically.
   const labels = Object.keys(groups).sort((a, b) => {
     if (numAttrs.includes(state.xAxis)) {
       return parseFloat(a) - parseFloat(b);
     }
     if (state.xAxis === 'model_quant') {
+      // Step 1: sort by quant bit nunmber
       const firstNum = s => { const m = s.match(/\d+(\.\d+)?/); return m ? parseFloat(m[0]) : Infinity; };
       const nd = firstNum(a) - firstNum(b);
-      if (nd !== 0) {
-	  return nd;
-      } else {
-	  return a.localeCompare(b);
-      }
+      if (nd !== 0) return nd;
+
+      // Step 2: sort by size (S/M/L)
+      const QUANT_SIZE = ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL'];
+      const quantSuffix = s => {
+	const m = s.match(/_([A-Z]+)$/);
+	if (!m) return -1;
+	const idx = QUANT_SIZE.indexOf(m[1]);
+	return idx === -1 ? -1 : idx;
+      };
+      const sd = quantSuffix(a) - quantSuffix(b);
+      if (sd !== 0) return sd;
+	
+      // Step 3: sort lexicographically
+      return a.localeCompare(b);
     }
     return a.localeCompare(b);
   });
