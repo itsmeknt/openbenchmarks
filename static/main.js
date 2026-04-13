@@ -4,12 +4,12 @@
  
 /** Columns shown in the data table (in order). */
 const TABLE_COLS = [
-    'benchmark', 'model', 'model_id', 'model_quant', 'model_size_gb', 'kv_quant', 'format',
+    'benchmark', 'model', 'model_id', 'model_quant', 'model_filesize_gb', 'kv_quant', 'format',
     'pass_1', 'pass_2', 'prompt_tokens', 'completion_tokens', 'error_outputs', 'exhausted_context_windows', 'seconds_per_test', 'total_cost', 'evaluator', 'date',
 ];
  
 /** Numeric-looking columns for display alignment. */
-const NUMERIC_DISPLAY = new Set(['model_size_gb', 'pass_1', 'pass_2', 'prompt_tokens',
+const NUMERIC_DISPLAY = new Set(['model_filesize_gb', 'pass_1', 'pass_2', 'prompt_tokens',
   'completion_tokens', 'error_outputs', 'exhausted_context_windows', 'seconds_per_test', 'total_cost']);
  
 // ================================================================
@@ -360,14 +360,14 @@ function renderChart(rows) {
             let rows_html = shown.map(r => {
               const mid   = String(r.model_id   ?? '—');
               const mq    = String(r.model_quant ?? '—');
-              const ms    = r.model_size_gb != null && r.model_size_gb !== '' ? Number(r.model_size_gb).toFixed(1) + ' GB' : '—';
+              const mfs    = r.model_filesize_gb != null && r.model_filesize_gb !== '' ? Number(r.model_filesize_gb).toFixed(1) + ' GB' : '—';
               const ev    = String(r.evaluator  ?? '—');
               const yval  = r[yKey] != null && r[yKey] !== '' ? Number(r[yKey]).toFixed(1) : '—';
               const midShort = mid.length > 36 ? mid.slice(0, 35) + '…' : mid;
               return `<tr>
                 <td title="${mid}">${midShort}</td>
                 <td>${mq}</td>
-                <td class="num">${ms}</td>
+                <td class="num">${mfs}</td>
                 <td>${ev}</td>
                 <td class="num">${yval}</td>
               </tr>`;
